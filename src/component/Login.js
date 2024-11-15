@@ -1,12 +1,33 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import {
+  handlePasswordValidation,
+  handleEmailValidation,
+} from "../Utils/formValidation";
 const Login = () => {
   const [isSignInForm, setSignInForm] = useState(true);
   const toggleSignInForm = () => {
     setSignInForm(!isSignInForm);
   };
+
+  const [errorEmailMessaga, setEmailerrorMessage] = useState();
+  const [errorPasswordMessaga, setPassworderrorMessage] = useState();
+
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const navigate = useNavigate();
+  const handleButton = () => {
+    console.log(email.current.value);
+    console.log(password.current.value);
+    const emailValidate = handleEmailValidation(email.current.value);
+    const passwordValidate = handlePasswordValidation(password.current.value);
+    setEmailerrorMessage(emailValidate);
+    setPassworderrorMessage(passwordValidate);
+    navigate("/browse");
+  };
+
   return (
     <div>
       <Header />
@@ -18,7 +39,10 @@ const Login = () => {
       </div>
 
       <div className="align-middle">
-        <form className="absolute bg-black my-36 p-12 w-3/12 mx-auto right-0 left-0 text-white bg-opacity-80">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="absolute bg-black my-36 p-12 w-3/12 mx-auto right-0 left-0 text-white bg-opacity-80"
+        >
           <h2 className="font-bold text-3xl py-4 px-2">
             {!isSignInForm ? "Sign Up" : "Sign In"}
           </h2>
@@ -32,22 +56,34 @@ const Login = () => {
                 ></input>
               )}
             </div>
+
             <div>
               <input
+                ref={email}
                 type="text"
                 placeholder="Email or mobile number"
                 className="p-2 m-2 bg-gray-700  "
               ></input>
             </div>
+            <p className="text-red-400">
+              {errorEmailMessaga && "enter valid email id"}
+            </p>
             <div>
               <input
+                ref={password}
                 type="password"
                 placeholder="password"
                 className="p-2 m-2 bg-gray-700 rounded-sm"
               ></input>
             </div>
+            <p className="text-red-400">
+              {errorPasswordMessaga && "enter valid password"}
+            </p>
             <div className="">
-              <button className="px-[78px] py-2 m-2 bg-red-700 align-middle ">
+              <button
+                className="px-[78px] py-2 m-2 bg-red-700 align-middle"
+                onClick={handleButton}
+              >
                 {!isSignInForm ? "sign Up" : "sign in"}
               </button>
             </div>
