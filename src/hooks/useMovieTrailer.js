@@ -2,11 +2,12 @@ import { API_OPTIONS } from "../Utils/constants";
 import { useDispatch } from "react-redux";
 import { addTriler } from "../Utils/moviesSlice";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const useMovieTrailer = (movieId) => {
   const dispatch = useDispatch();
   //   console.log(movieId);
-  const selector = useSelector((store) => store);
+  const selector = useSelector((store) => store.movies?.trailer);
 
   const getMovieVideos = async () => {
     const data = await fetch(
@@ -22,7 +23,8 @@ const useMovieTrailer = (movieId) => {
   };
 
   useEffect(() => {
-    getMovieVideos();
+    //memmoizization making api calls when only their is no data in store
+    !selector && getMovieVideos();
   }, []);
 };
 export default useMovieTrailer;

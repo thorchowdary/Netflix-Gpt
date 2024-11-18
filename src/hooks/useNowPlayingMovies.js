@@ -1,6 +1,6 @@
 import { API_OPTIONS } from "../Utils/constants";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addNowPlayingMovies,
   addPopularMovies,
@@ -11,6 +11,7 @@ import {
 
 const useNowPlayingMovies = () => {
   const dispatch = useDispatch();
+  const selector = useSelector((store) => store.movies?.popular);
 
   const popularMovies = async () => {
     const data = await fetch(
@@ -61,19 +62,29 @@ const useNowPlayingMovies = () => {
   };
 
   useEffect(() => {
+    //TODO:     //memmoizization making api calls when only their is no data in store
+
     getNowPlayingMovies();
   }, []);
   useEffect(() => {
-    popularMovies();
+    //memmoizization making api calls when only their is no data in store
+
+    !selector && popularMovies();
   }, []);
   useEffect(() => {
+    //TODO:     //memmoizization making api calls when only their is no data in store
+
     getTrendingMovies();
   });
   useEffect(() => {
+    //TODO:     //memmoizization making api calls when only their is no data in store
+
     getUpcoming();
   });
 
   useEffect(() => {
+    //TODO:     //memmoizization making api calls when only their is no data in store
+
     getTopRated();
   });
 };
