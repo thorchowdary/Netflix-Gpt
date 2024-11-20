@@ -14,7 +14,7 @@ const Browse = () => {
       {toggleGptView ? (
         <GptSearchPage />
       ) : (
-        <>
+        <> // react fragments
           <MainContainer />
           <SecondaryContainer />
         </>
